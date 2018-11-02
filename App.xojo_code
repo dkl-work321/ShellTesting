@@ -6,21 +6,36 @@ Inherits Application
 		  
 		  Dim exe_to_run As FolderItem
 		  
-		  // below is just running against the exe in the Xojo build folder 
-		  //exe_to_run = New FolderItem("C:\XojoProjs_ADAPT\XojoProjects\GradientEditor\Builds - GradientEditor.xojo_project\Windows\GradientEditor\GradientEditor.exe", FolderItem.PathTypeNative)
+		  Dim whole_cl As String
+		  Dim the_exe As String
+		  Dim p1 As Int32
+		  Dim p2 As Int32
 		  
-		  ' Below assumes installation is C:\ADAPT...
-		  exe_to_run = New FolderItem("C:\ADAPT\Mellen\ADAPT XP\Bin\GradientEditor.exe")
+		  whole_cl = System.CommandLine
+		  System.DebugLog(whole_cl)
 		  
-		  If exe_to_run <> Nil And exe_to_run.Exists Then
-		    LaunchAsAdmin(exe_to_run)
+		  p1 = whole_cl.InStr(".exe")
+		  If p1 = 0 Then
+		    MsgBox("Program: " + whole_cl + " Is syntactically incorrect for execution.")
+		    Self.AutoQuit = True
 		  Else
-		    MsgBox("Failed to run " + exe_to_run.Name)
+		    p2 = p1 + 5
+		    the_exe = whole_cl.Mid(p2+1)
+		    System.DebugLog(the_exe)
+		    
+		    exe_to_run = New FolderItem(the_exe)
+		    
+		    If exe_to_run <> Nil And exe_to_run.Exists Then
+		      LaunchAsAdmin(exe_to_run)
+		    Else
+		      MsgBox("Failed to run " + exe_to_run.Name)
+		    End If
+		    
+		    SleepCurrentThread(1000)
+		    
+		    Self.AutoQuit =True 
+		    
 		  End If
-		  
-		  SleepCurrentThread(1000)
-		  
-		  Self.AutoQuit =True 
 		End Sub
 	#tag EndEvent
 
